@@ -1,10 +1,18 @@
+Flask==3.0.0
+Flask-Bcrypt==1.0.1
+Flask-Login==0.6.3
+Flask-Mail==0.9.1
+Flask-Migrate==4.0.5
+Flask-SQLAlchemy==3.0.2
+Flask-WTF==1.2.1
+gunicorn==20.0.4
+itsdangerous==2.1.2
 numpy
 pandas
-Flask
-scikit-learn==1.2.2
+Pillow==9.4.0
+requests==2.29.0
 --extra-index-url https://download.pytorch.org/whl/cpu
 torch==2.0.1
 torchvision==0.15.2
-requests
-Pillow
-gunicorn
+WTForms==3.1.1
+scikit-learn==1.2.2

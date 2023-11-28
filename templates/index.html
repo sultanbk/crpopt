@@ -2,47 +2,44 @@
 
 {% block body %}
 <!-- banner -->
-<section class="banner_w3lspvt" id="home">
-	<div class="csslider infinity" id="slider1">
-	
-				<div class="banner-top">
-					<div class="overlay">
-						<div class="container">
-							<div class="w3layouts-banner-info text-center">
-								<h3 class="text-wh">Crop Optimization</h3>
-								<h4 class="text-wh mx-auto my-4">Growing Success, one crop at a time.</h4>
-								<h4 class="text-wh mx-auto my-4"><b>Get informed decisions about your farming strategy.</b></h4>
-								
-								<h4 class="text-wh mx-auto my-4"><strong> Here are some questions we'll answer</strong></h4>
-								<p class="text-li mx-auto mt-2">
-									1. What crop to plant here? <br>
-									2. What fertilizer to use? <br>
-									3. Which disease do your crop have?<br>
-									4. How to cure the disease?</p>
-							</div>
-						</div>
-					</div>
-				</div>
-	</div>
-</section>
+<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+  <ol class="carousel-indicators">
+    <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+    <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+    <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+  </ol>
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <img class="d-block w-100" src="static/images/1.jpg" alt="First slide">
+    </div>
+    <div class="carousel-item">
+      <img class="d-block w-100" src="static/images/farm_background.jpg" alt="Second slide">
+    </div>
+    <div class="carousel-item">
+      <img class="d-block w-100" src="static/images/3.jpg" alt="Third slide">
+    </div>
+  </div>
+  <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="sr-only">Previous</span>
+  </a>
+  <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="sr-only">Next</span>
+  </a>
+</div>
 <!-- //banner -->
-
 <!-- core values -->
 <section class="core-value py-5">
 	<div class="container py-md-4">
-		<h3 class="heading mb-sm-5 mb-4 text-center"> About Us</h3>
+		<h3 class="heading mb-sm-5 mb-4 text-center"> Crop Optimization</h3>
 		<div class="row core-grids">
 			<div class="col-lg-6 core-left">
-				<img src="{{ url_for('static', filename='images/core.jpg') }}" class="img-fluid" alt="" />
+				<img src="{{ url_for('static', filename='images/crop-protection-1280.jpg') }}" class="home-img img-fluid" alt="" style="object-fit:inherit; width: 100%; height: 100%;" />
 			</div>
 			<div class="col-lg-6 core-right">
-				<h3 class="mt-4">Improving Agriculture, Improving Lives, Cultivating Crops To Make Farmers Increase
-					Profit.</h3>
-				<p class="mt-3">We use state-of-the-art machine learning and deep learning technologies to help you
-					guide through
-					the entire farming process. Make informed decisions to understand the demographics of your area,
-					understand the
-					factors that affect your crop and keep them healthy for a super awesome successful yield.</p>
+				<h3 class="mt-1">Growing Success, One Crop at a Time..</h3>
+				<p class="mt-3">Crop optimization is the strategic application of technology and data-driven approaches to enhance agricultural practices.  This holistic approach considers factors like soil health, weather patterns, and crop rotation, ensuring a balance between productivity and environmental sustainability.<br><span style="color: black;">"Harvesting Innovation, Feeding the World."</span></p>
 			</div>
 		</div>
 	</div>
@@ -52,39 +49,72 @@
 <!-- Products & Services -->
 <section class="blog py-5">
 	<div class="container py-md-5">
-		<h3 class="heading mb-sm-5 mb-4 text-center"> Our Services</h3>
+		<h3 class="heading project-header team-header text-left"> Our Services</h3><hr color="#60c344">
 		<div class="row blog-grids">
-			<div class="col-lg-4 col-md-6 blog-left mb-lg-0 mb-sm-5 pb-lg-0 pb-5">
-				<img src="{{ url_for('static', filename='images/s3.jpg') }}" class="img-fluid" alt="" />
+
+			<!--First Service-->
+			<div class="col-sm-2 col-md-3 margin-left-20 ">
+					<img src="{{ url_for('static', filename='images/crop-icon.jpg') }}" class="img-thumbnail img-fliud" alt="" />
 				<a href="{{ url_for('crop_recommend') }}">
+
 					<div class="blog-info">
-
 						<h4>Crop</h4>
-
-						<p class="mt-2"> Recommendation about the type of crops to be cultivated which is best suited
-							for the respective conditions</p>
+						<div class="blog-about mt-1">
+							<p class="mt-2"> Recommendation about the type of crops to be cultivated which is best suited for the respective conditions</p>
+						</div>
+						<!--<p class="mt-2"> Recommendation about the type of crops to be cultivated which is best suitedfor the respective conditions</p>-->
 					</div>
 				</a>
 			</div>
-			<div class="col-lg-4 col-md-6 blog-middle mb-lg-0 mb-sm-5 pb-lg-0 pb-md-5">
-				<img src="{{ url_for('static', filename='images/s2.jpg') }}" class="img-fluid" alt="" />
+
+			<!--Second Service-->
+			<div class="col-sm-2 col-md-3 margin-left-20 ">
+					<img src="{{ url_for('static', filename='/images/ferti.png') }}" class="img-thumbnail img-fliud" alt="" />
 				<a href="{{ url_for('fertilizer_recommendation') }}">
+
 					<div class="blog-info">
 						<h4>Fertilizer</h4>
-						<p class="mt-2">Recommendation about the type of fertilizer best suited for the particular soil
-							and crop</p>
+						<div class="blog-about mt-1">
+							<p class="mt-2">Recommendation about the type of fertilizer best suited for the particular soil and the recommended crop</p>
+						</div>
+						<!--<p class="mt-2">Recommendation about the type of fertilizer best suited for the particular soil
+							and the recommended crop</p>-->
 					</div>
 				</a>
 			</div>
-			<div class="col-lg-4 col-md-6 blog-right mt-lg-0 mt-5 pt-lg-0 pt-md-5">
 
-				<img src="{{ url_for('static', filename='images/s4.jpg') }}" class="img-fluid" alt="">
+			<!--Third Service-->
+			<div class="col-sm-2 col-md-3 margin-left-20 ">
+					<img src="{{ url_for('static', filename='images/disease_icon.png') }}" class="img-thumbnail img-fliud" alt="">
 
-				<!-- <img src="images/s4.jpg" class="img-fliud" alt="" /> -->
 				<a href="{{ url_for('disease_prediction') }}">
 					<div class="blog-info">
 						<h4>Crop Disease</h4>
-						<p class="mt-2">Predicting the name and causes of crop disease and suggestions to cure it</p>
+						<div class="blog-about mt-1" 
+						style=" position: absolute;
+							bottom: 30px;
+							right: -10px;
+						">
+							<p class="mt-2">Predicting the name and causes of crop disease and suggestions to cure it</p>
+						</div>
+						<!--<p class="mt-2">Predicting the name and causes of crop disease and suggestions to cure it</p>-->
+					</div>
+				</a>
+			</div>
+
+			<!--Fourth Service-->
+			<div class="col-sm-2 col-md-3 margin-left-20 ">
+					<img src="{{ url_for('static', filename='images/icon_fungicide.png') }}" class="img-thumbnail img-fliud" alt=""><!-- find a suitable icon for "seed price"-->
+				
+				<a href="{{ url_for('disease_prediction') }}">
+					<div class="blog-info">
+						<h4>Seed Price</h4>
+						<div class="blog-about mt-1" style=" position: absolute;
+						bottom: 30px;
+						right: -10px;">
+							<p class="mt-2"> Seed prices, vital in agriculture, dictate the initial investment for farmers.</p>
+						</div>
+						<!--<p class="mt-2">Predicting the name and causes of crop disease and suggestions to cure it</p>-->
 					</div>
 				</a>
 			</div>
@@ -95,6 +125,7 @@
 
 
 <!-- Creating custom grid and hover effect
+<section>
 <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
     <div class="hovereffect">
         <img class="img-responsive" src="images/s2.jpg" alt="">
@@ -104,7 +135,6 @@
         </div>
     </div>
 </div> -->
-<section>
 
 </html>
 

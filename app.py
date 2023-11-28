@@ -1,23 +1,31 @@
 # Importing essential libraries and modules
-
-from flask import Flask, render_template, request, redirect
-from markupsafe import Markup
-import numpy as np
-import pandas as pd
-from utils.disease import disease_dic
-from utils.fertilizer import fertilizer_dic
-import requests
-import config
 import pickle
 import io
-import torch
+import random
+from flask import Flask, redirect, render_template, request, flash, url_for,current_app
+from flask_login import LoginManager, UserMixin, login_user, current_user, logout_user, login_required
+from flask_bcrypt import Bcrypt
+from markupsafe import Markup
+from flask_sqlalchemy import SQLAlchemy
+import numpy as np
+import pandas as pd
+import requests
 from torchvision import transforms
+import torch
 from PIL import Image
+from flask_migrate import Migrate
+from flask_mail import Mail, Message
+from flask_wtf import FlaskForm
+from wtforms.validators import DataRequired, EqualTo, Email, Length
+from itsdangerous import Serializer
+from sqlalchemy.exc import IntegrityError
+from wtforms import StringField, SubmitField, PasswordField
 from utils.model import ResNet9
-# ==============================================================================================
-
-# -------------------------LOADING THE TRAINED MODELS -----------------------------------------------
-
+from utils.disease import disease_dic
+from utils.fertilizer import fertilizer_dic
+from forms import RegistrationForm, LoginForm
+import config
+# -------------------------LOADING THE TRAINED MODELS---------
 # Loading plant disease classification model
 
 disease_classes = ['Apple___Apple_scab',
@@ -127,32 +135,267 @@ def predict_image(img, model=disease_model):
 # ------------------------------------ FLASK APP -------------------------------------------------
 
 
+class LazyDB:
+    def __init__(self, app):
+        self._db = None
+        self.app = app
+
+    @property
+    def db(self):
+        if self._db is None:
+            self._db = SQLAlchemy(self.app)
+        return self._db
+
 app = Flask(__name__)
+app.config['SECRET_KEY']='9dbbb9bfe4a0c0eb93f38a5ee3a851a2'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
+
+lazy_db = LazyDB(app)
+bcrypt = Bcrypt(app)
+migrate = Migrate(app, lazy_db.db)
+
+app.config['MAIL_SERVER'] = 'smtp.googlemail.com'
+app.config['MAIL_PORT'] = 465
+#app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USE_SSL'] = True
+app.config['MAIL_USERNAME'] = 'sbkhelpdesk258@gmail.com'
+app.config['MAIL_PASSWORD'] = 'imiy lpgt eeum vikw'
+mail = Mail(app)
+
+def send_email(to, subject, template):
+    print(f"Sending email to {to}")
+    try:
+        msg = Message(
+            subject,
+            recipients=[to],
+            html=template,
+            sender=app.config['MAIL_USERNAME']
+        )
+        mail.send(msg)
+    except Exception as e:
+        print(f"Failed to send email: {e}")
+        
+def send_otp(email):
+    print(f"Sending OTP to {email}")
+    otp = random.randint(100000, 999999)
+    try:
+        send_email(email, 'Your OTP', f'<h1>Your OTP is {otp}</h1>')
+        print(f"OTP sent to {email}")
+    except Exception as e:
+        print(f"Failed to send OTP: {e}")
+    return otp
+
+login_manager = LoginManager(app)
+login_manager.login_view = 'login'
+login_manager.login_message_category = 'info'
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
+class User(lazy_db.db.Model, UserMixin):
+    id = lazy_db.db.Column(lazy_db.db.Integer, primary_key=True)
+    username = lazy_db.db.Column(lazy_db.db.String(20), unique=True, nullable=False)
+    email = lazy_db.db.Column(lazy_db.db.String(120), unique=True, nullable=False)
+    image_file = lazy_db.db.Column(lazy_db.db.String(20), nullable=False, default='default.jpg')
+    password = lazy_db.db.Column(lazy_db.db.String(60), nullable=False)
+    
+    def __repr__(self):
+        return f"User('{self.username}', '{self.email}', '{self.image_file}')"
+    def get_reset_token(self, expires_sec=1800):
+        s = Serializer(app.config['SECRET_KEY'], expires_sec)
+        return s.dumps({'user_id': self.id}).decode('utf-8')
+
+    @staticmethod
+    def verify_reset_token(token):
+        s = Serializer(app.config['SECRET_KEY'])
+        try:
+            user_id = s.loads(token)['user_id']
+        except:
+            return None
+        return User.query.get(user_id)
+
+class ResetPasswordForm(FlaskForm):
+    password = PasswordField('New Password', validators=[DataRequired(), Length(min=6)])
+    confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
+    submit = SubmitField('Reset Password')
+
+def send_reset_email(user, token):
+    """
+    Send an email with the password reset instructions.
+    :param user: User object
+    :param token: Reset token
+    """
+    print(f"Sending email to {user.email}")
+    try:
+        reset_url = url_for("reset_password", token=token, _external=True)
+        msg = Message(
+            'Password Reset Request',
+            recipients=[user.email],
+            html=f'Hello {user.username},<br><br>'
+                 f'We hope this email finds you well. You are receiving this email because a password reset request was submitted for your account.<br><br>'
+                 f'<a href="{reset_url}" style="background-color: #4CAF50; color: white; padding: 15px 32px; text-align: center; text-decoration: none; display: inline-block; font-size: 16px; margin: 4px 2px; cursor: pointer; border-radius: 5px;">Reset Password</a><br><br>'
+                 f'If you did not make this request, simply ignore this email, and no changes will be made.<br><br>'
+                 f'Thank you for choosing our service!<br><br>'
+                 f'Best regards,<br>The Support Team',
+            sender=current_app.config['MAIL_USERNAME']
+        )
+        mail.send(msg)
+        print("Email sent successfully.")
+    except Exception as e:
+        print(f"Failed to send email: {e}")
+
+
+        
+with app.app_context():
+    lazy_db.db.create_all()
+    
+class RequestResetForm(FlaskForm):
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    submit = SubmitField('Request Password Reset')
+    
+app.config['DEBUG'] = True
 
 # render home page
 
 
 @ app.route('/')
+@ app.route('/home')
 def home():
-    title = 'Harvestify - Home'
+    title = 'CropOptimization - Home'
     return render_template('index.html', title=title)
 
 # render crop recommendation form page
 
 
 @ app.route('/crop-recommend')
+@login_required
 def crop_recommend():
-    title = 'Harvestify - Crop Recommendation'
+    title = 'CropOptimization - Crop Recommendation'
     return render_template('crop.html', title=title)
 
 # render fertilizer recommendation form page
 
 
 @ app.route('/fertilizer')
+@login_required
 def fertilizer_recommendation():
-    title = 'Harvestify - Fertilizer Suggestion'
+    title = 'CropOptimization - Fertilizer Suggestion'
 
     return render_template('fertilizer.html', title=title)
+@app.route('/health')
+def health_check():
+    return 'OK', 200
+
+
+@app.route("/register", methods=['GET', 'POST'])
+def register():
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(username=form.username.data).first()
+        if user:
+            flash('Username already exists. Please choose a different one.', 'danger')
+            return render_template('register.html', title='Register', form=form)
+        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+        user = User(username=form.username.data, email=form.email.data, password=hashed_password)
+        try:
+            lazy_db.db.session.add(user)
+            lazy_db.db.session.commit()
+            flash('Your account has been created! You are now able to log in', 'success')
+            return redirect(url_for('login'))
+        except IntegrityError:
+            lazy_db.db.session.rollback()
+            flash('Email already exists. Please choose a different one.', 'danger')
+    return render_template('register.html', title='Register', form=form)
+
+
+
+@app.route("/login", methods=['GET', 'POST'])
+def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
+    form = LoginForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first()
+        if user and bcrypt.check_password_hash(user.password, form.password.data):
+            login_user(user, remember=form.remember.data)
+            flash('Welcome, {}!'.format(user.username))  # Display welcome message
+            next_page = request.args.get('next')
+            return redirect(next_page) if next_page else redirect(url_for('home'))
+        else:
+            flash('Login Unsuccessful. Please check email and password', 'danger')
+    return render_template('login.html', title='Login', form=form)
+
+#About Us Page
+@ app.route('/about_us')
+def aboutus():
+    title = 'CropOptimization - About Us'
+
+    return render_template('aboutUs.html', title=title)
+
+#Feedback page
+@ app.route('/feedback')
+def feedback():
+    title = 'CropOptimization - Feedback'
+
+    return render_template('feedback.html', title=title)
+
+def generate_reset_token(user):
+    """
+    Generate a unique token for password reset.
+    :param user: User object for whom the token is generated
+    :return: Reset token
+    """
+    s = Serializer(current_app.config['SECRET_KEY'])
+    return s.dumps({'user_id': user.id})
+
+@app.route("/reset_password", methods=['GET', 'POST'])
+def reset_request():
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
+    
+    form = RequestResetForm()
+    
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first()
+        if user:
+            token = generate_reset_token(user)
+            send_reset_email(user, token)
+            flash('An email has been sent with instructions to reset your password.', 'info')
+            return redirect(url_for('login'))
+        else:
+            flash('No account found with that email.', 'warning')
+            return redirect(url_for('reset_request'))
+    
+    return render_template('reset_request.html', title='Reset Password', form=form)
+
+
+@app.route("/reset_password/<token>", methods=['GET', 'POST'])
+def reset_password(token):
+    user = User.verify_reset_token(token)
+    
+    if not user:
+        flash('Invalid or expired token. Please try again.', 'warning')
+        return redirect(url_for('reset_request'))
+    
+    form = ResetPasswordForm()
+    
+    if form.validate_on_submit():
+        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+        user.password = hashed_password
+        lazy_db.db.session.commit()
+        flash('Your password has been updated! You can now log in.', 'success')
+        return redirect(url_for('login'))
+    
+    return render_template('reset_password.html', title='Reset Password', form=form)
+
+
+@app.route("/logout")
+def logout():
+    logout_user()
+    return redirect(url_for('home'))
 
 # render disease prediction input page
 
@@ -167,6 +410,7 @@ def fertilizer_recommendation():
 
 
 @ app.route('/crop-predict', methods=['POST'])
+@login_required
 def crop_prediction():
     title = 'Harvestify - Crop Recommendation'
 
@@ -196,6 +440,7 @@ def crop_prediction():
 
 
 @ app.route('/fertilizer-predict', methods=['POST'])
+@login_required
 def fert_recommend():
     title = 'Harvestify - Fertilizer Suggestion'
 
@@ -240,6 +485,7 @@ def fert_recommend():
 
 
 @app.route('/disease-predict', methods=['GET', 'POST'])
+@login_required
 def disease_prediction():
     title = 'Harvestify - Disease Detection'
 
@@ -260,7 +506,5 @@ def disease_prediction():
             pass
     return render_template('disease.html', title=title)
 
-
-# ===============================================================================================
 if __name__ == '__main__':
-    app.run(debug=False)
+    app.run(debug=True)

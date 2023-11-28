@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-	<title>{{ title }}</title>
+	<title>Crop Optimization</title>
 	<link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.ico') }}"/>
 
 	<!-- for-mobile-apps -->
@@ -158,41 +158,69 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top" style="background-color: #1C00ff00;">
 		<div class="container">
 			<a class="navbar-brand" href="{{ url_for('home') }}">
-				<img src="{{ url_for('static', filename='images/logo-color.png') }}" style="width: 90px; height: 90px; border-radius: 50%;
-				object-fit:contain scale-down;" alt="">
+				<img src="{{ url_for('static', filename='images/logo-color.svg') }}" style="width: 100px; height: 100px; border-radius: 50%; 
+				object-fit: contain scale-down;" alt="">
 			</a>
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
 				aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
 			</button>
+			<!--For Dropdown List(commented unchnaged)-->
+			<!--<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+				aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="dropdown-menu"></span>
+			</button>-->
 			<div class="collapse navbar-collapse" id="navbarResponsive">
 				<ul class="navbar-nav ml-auto">
-					<li class="nav-item active">
-						<a class="nav-link" href="{{ url_for('home') }}">Home
+					<li class="nav-item ">
+						<a class="nav-link" href="{{ url_for('home') }}">
+							<img class="icons" src="{{ url_for('static', filename='images/home.svg') }}">
+							Home
 							<span class="sr-only">(current)</span>
 						</a>
 					</li>
+					{% if current_user.is_authenticated %}
 					<li class="nav-item">
-						<a class="nav-link" href="{{ url_for('crop_recommend') }}">Crop</a>
+						<a class="nav-link" href="{{ url_for('crop_recommend') }}">
+							<img class="icons" src="{{ url_for('static', filename='images/corn-152037.svg') }}">
+							Crop
+						</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" href="{{ url_for('fertilizer_recommendation') }}">Fertilizer</a>
+						<a class="nav-link" href="{{ url_for('fertilizer_recommendation') }}">
+							<img class="icons" src="{{ url_for('static', filename='images/ferti.png') }}">
+							Fertilizer
+						</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" href="{{ url_for('disease_prediction') }}">Disease</a>
+						<a class="nav-link" href="{{ url_for('disease_prediction') }}">
+							<img class="icons" src="{{ url_for('static', filename='images/disease_icon.png') }}">
+							Disease
+						</a>
 					</li>
+					{% endif %}
 					<li class="nav-item">
-						<a class="nav-link" href="{{ url_for('disease_prediction') }}">Log In</a>
-					</li>
+						{% if current_user.is_authenticated %}
+						<a class="btn btn-outline-light text-body" href="{{ url_for('logout') }}" role="button" style="margin-top: 50%; margin-left:45%; font-weight: bolder;">Logout</a>
+						{% else %}
+						<a class="btn btn-outline-light text-body" href="{{ url_for('login') }}" role="button" style="margin-top: 50%; margin-left:45% ; font-weight: bolder;">Login</a>
+				</li>
+				{% endif %}
 				</ul>
 			</div>
 		</div>
 	</nav>
 
-
-
-
-	{% block body %} {% endblock %}
+	{% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+              {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+                  {{ message }}
+                </div>
+              {% endfor %}
+            {% endif %}
+          {% endwith %}
+          {% block body %}{% endblock %}
 
 	<!-- footer -->
 	<footer class="text-center py-5">
@@ -205,29 +233,37 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			</h2>
 			<!-- //logo -->
 			<!-- address -->
-			<!--<div class="contact-left-footer mt-4">
+			<div class="contact-left-footer mt-4">
 
 
 
 
 
-				 <a href="community.html">Community</a>
+				<!-- <a href="community.html">Community</a> -->
 				</p>
 			</div>
 			<div class="w3l-copy text-center">
-				<p class="text-da">An Environmental Intelligence Startup<br> </p>
+				<p class="text-da">An Initiation towards Better Yeild and a Happy Farmer<br></p>
+				<a href="{{ url_for('aboutus') }} " class="about-us text-da" style="text-decoration: none; padding-right: 10px;" class="btn btn-primary" data-bs-toggle="tooltip" title="Click Here" data-bs-placement="left" data-bs-custom-class="custom-tooltip">About Us <span style="padding-left: 10px;">&#8226;</span></a>
+				<a href="{{ url_for('feedback') }}" target="_blank" class="about-us" class="btn btn-primary" data-bs-toggle="tooltip" title="Click Here" data-bs-placement="right" data-bs-custom-class="custom-tooltip"> 
+					Feedback
+				</a>
 			</div>
-			<p class="homelogo">
-			<p></p>
-			<p></p> -->
-			
 		</div>
 	</footer>
 	<!-- //footer -->
 
 	<!-- move top icon -->
-	<a href="#home" class="move-top text-center"></a>
+	<a href="#top" class="move-top text-center"></a>
 	<!-- //move top icon -->
+
+	<script>
+		// Initialize tooltips
+		var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+		var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+		  return new bootstrap.Tooltip(tooltipTriggerEl)
+		})
+	</script>
 </body>
 
 </html>
