@@ -412,7 +412,7 @@ def logout():
 @ app.route('/crop-predict', methods=['POST'])
 @login_required
 def crop_prediction():
-    title = 'Harvestify - Crop Recommendation'
+    title = 'CropOptimization - Crop Recommendation'
 
     if request.method == 'POST':
         N = int(request.form['nitrogen'])
@@ -442,7 +442,7 @@ def crop_prediction():
 @ app.route('/fertilizer-predict', methods=['POST'])
 @login_required
 def fert_recommend():
-    title = 'Harvestify - Fertilizer Suggestion'
+    title = 'CropOptimization - Fertilizer Suggestion'
 
     crop_name = str(request.form['cropname'])
     N = int(request.form['nitrogen'])
