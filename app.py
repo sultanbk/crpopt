@@ -412,7 +412,7 @@ def logout():
 @ app.route('/crop-predict', methods=['POST'])
 @login_required
 def crop_prediction():
-    title = 'Harvestify - Crop Recommendation'
+    title = 'CropOptimization - Crop Recommendation'
 
     if request.method == 'POST':
         N = int(request.form['nitrogen'])
@@ -442,7 +442,7 @@ def crop_prediction():
 @ app.route('/fertilizer-predict', methods=['POST'])
 @login_required
 def fert_recommend():
-    title = 'Harvestify - Fertilizer Suggestion'
+    title = 'CropOptimization - Fertilizer Suggestion'
 
     crop_name = str(request.form['cropname'])
     N = int(request.form['nitrogen'])
@@ -487,7 +487,7 @@ def fert_recommend():
 @app.route('/disease-predict', methods=['GET', 'POST'])
 @login_required
 def disease_prediction():
-    title = 'Harvestify - Disease Detection'
+    title = 'CropOptimization - Disease Detection'
 
     if request.method == 'POST':
         if 'file' not in request.files:
@@ -505,6 +505,11 @@ def disease_prediction():
         except:
             pass
     return render_template('disease.html', title=title)
+
+@app.route('/seed_price')
+def seed_price():
+    title = 'CropOptimization - Disease Detection'
+    return render_template('seed_price.html', title=title)
 
 if __name__ == '__main__':
     app.run(debug=True)
