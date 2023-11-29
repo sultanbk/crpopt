@@ -1307,6 +1307,7 @@ a.move-top {
 	}
 	.blog-grids {
 		margin-bottom: 100px;
+        justify-content: space-between;
 	}
 	.text p {
 		width: 100%;
@@ -1379,6 +1380,15 @@ a.move-top {
 		height: 300px;
 	}
 }
+
+@media(max-width:768px) {
+    .blog-info h4{
+        font-size: 18px;
+		line-height: 20px;
+        color: #000;
+    }
+}
+
 @media(max-width:736px) {
 	.w3layouts-banner-info h4 {
 		font-size: 18px;
@@ -1396,14 +1406,15 @@ a.move-top {
 		width: 100%;
 	}
 	.blog-info {
-		top: 280px;
+		top: 0;
 	}
 	.w3l-copy p {
 		font-size: 16px;
 	}
 	.blog-info h4 {
-		font-size: 20px;
-		line-height: 35px;
+		font-size: 18px;
+		line-height: 20px;
+        color: #000;
 	}
 	.welcome-grid span.fa {
 		font-size: 40px;
@@ -1488,6 +1499,18 @@ a.move-top {
 		font-size: 18px;
 	}
 }
+@media (min-width: 481px) and (max-width: 576px){
+    .blog-info {
+		top: 0;
+        margin-bottom: 40px;
+	}
+    .blog-about p{
+        padding: 4px;
+        font-size: 14px;
+        bottom: -120px;
+        right: 0;
+    }
+}
 @media(max-width:480px) {
 	.logo2 a {
 		font-size: 25px;
@@ -1509,8 +1532,15 @@ a.move-top {
 		line-height: 36px;
 	}
 	.blog-info {
-		top: 180px;
+		top: 0;
+        margin-bottom: 40px;
 	}
+    .blog-about p{
+        padding: 4px;
+        font-size: 14px;
+        bottom: -120px;
+        right: 0;
+    }
 	.about-left h3 {
 		font-size: 22px;
 		line-height: 34px;
