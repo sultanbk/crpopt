@@ -1759,7 +1759,7 @@ a.move-top {
 }
 
 .container{
-    width: 90%;
+    /*width: 90%;*/
     margin: 0 auto;
     padding: 10px 20px;
     /*border-bottom: 3px solid rgb(177, 177, 177) ;*/
