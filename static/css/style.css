@@ -1344,6 +1344,30 @@ a.move-top {
 	.n-right-w3ls {
 		width: 80%;
 	}
+    .crop-form{
+        grid-template-columns: 1fr !important;
+    }
+    .form-gp{
+        grid-template-columns: 1fr !important;
+        width: 100% ;
+        margin: 0px;
+    }
+    .form-gp label{
+        font-size: 14px !important;
+    }
+    .soil-content-area{
+        width: auto !important;
+    }
+    .rep-image{
+        display: none;
+
+    }
+    .rep-image img{ 
+        display: none;
+    }
+    .predict-button{
+        margin-top: 20px !important;
+    }
 }
 
 @media(max-width:800px) {

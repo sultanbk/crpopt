@@ -7,8 +7,8 @@
 </style>
 <!--Form Section-->
 <br /><br />
-<div class="container">
-  <h2 class="text-left mt-3 mb-3" style="color: black">
+<div class="container d-flex justify-content-center">
+  <h2 class="text-left mt-3 mb-3 mx-3" style="color: black">
     <b>Get informed advice on fertilizer based on soil</b><br />
     <span class="small">ಮಣ್ಣಿನ ಆಧಾರದ ಮೇಲೆ ಗೊಬ್ಬರದ ಬಗ್ಗೆ ತಿಳುವಳಿಕೆಯುಳ್ಳ ಸಲಹೆ ಪಡೆಯಿರಿ</span>
   </h2>
@@ -17,26 +17,26 @@
 
 <div class="container">
   <form class="p-sm-3" method="POST" action="{{ url_for('fert_recommend') }}">
-    <div class="form-group row">
+    <div class="form-group row justify-content-around">
       <label for="Nitrogen" class="col-sm-2 col-form-label" style="font-size: 17px"><b>Nitrogen<br/>ಸಾರಜನಕ</b></label>
       <div class="col-sm-4">
         <input type="number" class="form-control" id="Nitrogen" name="nitrogen" placeholder="Enter the value (example:50)" style="font-weight: bold; border: 2px solid rgb(0, 136, 14);" required />
       </div>
     </div>
-    <div class="form-group row">
+    <div class="form-group row justify-content-around">
       <label for="Phosphorous" class="col-sm-2 col-form-label" style="font-size: 17px"><b>Phosphorous<br />ರಂಜಕ</b></label>
       <div class="col-sm-4">
         <input type="number" class="form-control" id="Phosphorous" name="phosphorous" placeholder="Enter the value (example:50)" style="font-weight: bold; border: 2px solid rgb(0, 136, 14);" required />
       </div>
     </div>
 
-    <div class="form-group row">
+    <div class="form-group row justify-content-around">
       <label for="Pottasium" class="col-sm-2 col-form-label" style="font-size: 17px"><b>Pottasium<br />ಪೊಟಾಶಿಯಂ</b></label>
       <div class="col-sm-4">
         <input type="number" class="form-control" id="Pottasium" name="pottasium" placeholder="Enter the value (example:50)" style="font-weight: bold; border: 2px solid rgb(0, 136, 14);" required />
       </div>
     </div>
-    <div class="form-group row">
+    <div class="form-group row justify-content-around">
       <label for="crop" class="col-sm-2 col-form-label" style="font-size: 17px"><b>Crop you want to grow<br />ನೀವು ಬೆಳೆಯಲು ಇಚ್ಛಿಸುವ ಹೊಡೆ</b></label>
       <div class="col-sm-4">
         <select name="cropname" class="form-control" id="crop" placeholder="Select a crop" style="font-weight: bold; border: 2px solid rgb(0, 136, 14);" required>
@@ -65,11 +65,10 @@
             <option>coffee</option>
           </select>
         </div>
-        <div class="form-group row">
-          <div class="col-sm-24">
-            <button type="submit" class="btn btn-outline-success" style="color: black; font-weight: bold; width: 180px; height: 50px; border-radius: 12px; font-size: 21px; margin-top: 50px;">Predict/ಊಹಿಸಿ</button>
+      </div>
+          <div class="col-sm-24 d-flex justify-content-center" >
+            <button type="submit" class="btn btn-outline-success" style="color: black; font-weight: bold; width: 180px; height: auto; border-radius: 12px; font-size: 21px;">Predict/ಊಹಿಸಿ</button>
           </div>
-        </div>
     </form>
   </div>
   <!--<div>

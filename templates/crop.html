@@ -5,21 +5,29 @@
     html body {
       background-color: rgb(255, 255, 255);
 
-      
-  }
+    }
+
+    @media(max-width:736px){
+      .crop-title{
+        margin-left: 40px !important;
+      }
+      .soil-content-area{
+        margin-left: 40px !important;
+      }
+    }
 
   
 </style>
 <!--Form Section-->
 <br /><br />
-<h2 style="text-align: left; margin-left: 140px; color: black">
+<h2 class="crop-title" style="text-align: left; margin-left: 140px; color: black">
   <b>Find out the most suitable crop to grow in your farm</b><br /><span style="font-size: 18px;">ನಿಮ್ಮ ಕೃಷಿಭೂಮಿಯಲ್ಲಿ ಬೆಳೆಯಲು ಸೂಕ್ತವಾದ ಬೆಳೆಯನ್ನು ಕಂಡುಹಿಡಿಯಿರಿ</span>
 </h2>
 <br />
-<div style="display: grid; grid-template-columns: 1fr 1fr;
+<div class="crop-form" style="display: grid; grid-template-columns: 1fr 1fr;
         column-gap: 30px;
 ">
-  <div
+  <div class="soil-content-area"
     style="
       width: 50%;
       height: 50rem;
@@ -124,7 +132,7 @@
         </script>
       </div>
 
-      <div class="d-flex justify-content-center align-content-center">
+      <div class="predict-button d-flex justify-content-center align-content-center">
         <button
           type="submit"
           class="btn btn-outline-success"
@@ -135,7 +143,7 @@
       </div>
     </form>
   </div>
-  <div>
+  <div class="rep-image">
     <img src="{{ url_for('static', filename='images/Doc1.jpg') }}" style="width: 100%; height: 100%; object-fit: cover; vertical-align: top; object-position: top;" />
   </div>
 </div>
