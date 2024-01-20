@@ -1985,6 +1985,34 @@ a.move-top {
     color:#333;
     position: relative;
 }
+.blog-info2 {
+    background: #60c344;
+    padding: 10px;
+    
+	position: relative;
+    /*left: 6%;
+    right: 6%;
+    top: 200px;*/
+	text-align: center;
+	box-shadow: 0 3px 5px -1px rgba(0, 0, 0, 0.08), 0 5px 8px 0 rgba(0, 0, 0, 0.12), 0 1px 14px 0 rgba(0, 0, 0, 0.06);
+	letter-spacing: 1px;
+    line-height: 28px;
+	cursor: pointer;
+	transition: background-color 0.5s;
+}
+.blog-info2 h4 {
+    font-size: 22px;
+    line-height: 42px;
+    letter-spacing: 2px;
+    font-weight: 600;
+    text-transform: uppercase;
+	color: #fff;
+	transition: color 0.5s;
+}
+.blog-info2 h4 span.fa {
+    color: #009f4d;
+}
+
 
 /*.thank-you h1::before{
     content: "";
